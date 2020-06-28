@@ -1,13 +1,33 @@
 import React, {Component} from 'react';
-import './HeaderComponent.css'
 import {getPDFActionURL} from "./PrettyPDFToolsApp";
+import Nav from "react-bootstrap/Nav";
+import {Navbar} from "react-bootstrap";
 
 class HeaderComponent extends Component {
     render() {
         return (
             <div>
                 <header>
-                    <nav className={"navbar navbar-expand-lg navbar-dark bg-dark"}>
+                    <Navbar bg={"dark"} variant={"dark"} expand={"lg"} sticky={"top"}>
+                        <Navbar.Brand href={"/"}>
+                            <img src="assets/images/brand.png"
+                                 width={"50px"}
+                                 alt={"PrettyPDF"} className="d-inline-block align-center"/>{' '}
+                            PrettyPDF
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls="main-nav"/>
+                        <Navbar.Collapse id="main-nav">
+                            <Nav className={"mr-auto"}>
+                                <Nav.Link href="/">Home</Nav.Link>
+                                <Nav.Link href={getPDFActionURL("MERGE")}>Merge</Nav.Link>
+                                <Nav.Link href={getPDFActionURL("SPLIT")}>Split</Nav.Link>
+                                <Nav.Link href={getPDFActionURL("DELETE")}>Delete</Nav.Link>
+                                <Nav.Link href={getPDFActionURL("ENCRYPT")}>Lock</Nav.Link>
+                                <Nav.Link href={getPDFActionURL("DECRYPT")}>Unlock</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                    {/*<nav className={"navbar navbar-expand-lg navbar-dark bg-dark"}>
                         <a className={"navbar-brand flex"} href={"/"} title="PrettyPDF">
                             <img src="assets/images/brand.png"
                                 // className="d-inline-block align-top"
@@ -43,7 +63,7 @@ class HeaderComponent extends Component {
                                 </li>
                             </ul>
                         </div>
-                    </nav>
+                    </nav>*/}
                 </header>
             </div>
         );

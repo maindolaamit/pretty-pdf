@@ -3,7 +3,7 @@ import {getActionContentHeader, getActionHeader, useMyFormHook} from "./ActionUt
 
 function EncryptComponent() {
     return (
-        <div className="container align-t">
+        <div className="container body-container">
             {getActionHeader("Lock PDF")}
             {getActionContentHeader("The easiest way to password protect your PDF files, " +
                 "encrypt single or multiple PDF documents using password of your choice. Enter the password " +

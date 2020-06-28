@@ -4,7 +4,7 @@ import {getActionContentHeader, getActionHeader, useMyFormHook} from "./ActionUt
 // React Component {
 const SplitComponent = () => {
     return (
-        <div className="container">
+        <div className="container body-container">
             {getActionHeader("Split PDF File")}
             {getActionContentHeader("The easiest way to split a PDF files, split a PDF document into multiple" +
                 " PDF based on page number. Give page numbers separated by comma to split the file. For e.g. if " +
@@ -20,7 +20,7 @@ const SplitComponent = () => {
 // React Component
 function DeleteComponent() {
     return (
-        <div className="container">
+        <div className="container body-container">
             {getActionHeader("Delete PDF pages")}
             {getActionContentHeader("The easiest way to delete unwanted pages from a PDF file, enter the page" +
                 " numbers to be deleted in the box in comma separated form. For e.g. if you have a PDF file having " +

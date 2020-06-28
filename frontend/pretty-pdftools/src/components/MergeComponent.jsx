@@ -3,7 +3,7 @@ import {getActionContentHeader, getActionHeader, useMyFormHook} from "./ActionUt
 
 function MergeComponent() {
     return (
-        <div className="container">
+        <div className="container body-container">
             {getActionHeader("Merge PDF Files")}
             {getActionContentHeader("The easiest way to combine PDF Files, combine different PDF documents" +
                 "or other files types like images and merge them into a single PDF. Choose the files and hit Merge button")}
