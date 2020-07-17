@@ -26,27 +26,6 @@ export function getActionContentHeader(content) {
     )
 }
 
-/*function validateErrors(values) {
-    console.log("validating errors");
-    let errors = {};
-    const pageNumber = values.pageNumbers
-    if (pageNumber.trim().length === 0) {
-        errors.pageNumbers = "Field can not be empty."
-    } else if (pageNumber.length > 1) {
-        if (!pageNumber.includes(',')) {
-            errors.pageNumbers = "Page numbers should be comma separated.";
-        } else {
-            for (const item of pageNumber.split(",")) {
-                if (parseInt(item) === "NaN") {
-                    errors.pageNumbers = `Invalid page number ${item} should be integer`
-                }
-            }
-        }
-    }
-
-    return errors;
-}*/
-
 export const useMyFormHook = (initialValues, submitCallback, validateCallback) => {
     // Set the initial values
     const [values, setValues] = useState(initialValues);

@@ -103,7 +103,7 @@ function useSplitDeleteForm(actionType) {
             <label className="custom-file-label" htmlFor="pdfFile">Choose file</label>
             <div className={"invalid-feedback"}>{errors.pdfFile}</div>
         </div>
-        <button type={"submit"} className={"btn btn-info rounded-pill btn-lg waves-effect action-btn"}>{submitBtnText}
+        <button type={"submit"} className={"btn btn-warning rounded-pill btn-lg waves-effect action-btn"}>{submitBtnText}
         </button>
     </form>);
 }
