@@ -15,10 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,10 +27,10 @@ import java.util.stream.Collectors;
 
 import static com.maindola.pdftools.prettypdf.service.Utility.isEmpty;
 
-@org.springframework.web.bind.annotation.RestController
-@CrossOrigin(origins = "http://localhost:4201")
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/pretty-pdf")
-public class RestController {
+public class RestApiController {
     private static final Logger logger = LogManager.getLogger(RestService.class);
 
     @Autowired
@@ -48,8 +45,9 @@ public class RestController {
     private ResponseEntity<Resource> getFileResponse(Path inputFilePath, String type) {
         // Form Response Header
         HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + inputFilePath.getFileName()+"\"");
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + inputFilePath.getFileName() + "\"");
         header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Access-Control-Allow-Origin","*");
         header.add("Pragma", "no-cache");
         header.add("Expires", "0");
 
@@ -77,7 +75,22 @@ public class RestController {
                 e.printStackTrace();
             }
         }
-//        return new ResponseEntity<>(null, header, HttpStatus.NOT_FOUND);
+    }
+
+
+    @PostMapping(value = "/test", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String[] testMethod(@RequestParam(name = "user") String user,
+                               @RequestParam(name = "password") String password) {
+        System.out.println("user = " + user);
+        System.out.println("password = " + password);
+        return new String[]{"hello", "how"};
+    }
+
+    @PostMapping(value = "/testfile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String[] testMethod(@RequestParam(name = "pdfFile") MultipartFile myFile) {
+        String fileName = StringUtils.cleanPath(myFile.getOriginalFilename());
+        System.out.println("fileName = " + fileName);
+        return new String[]{"hello", "how"};
     }
 
     /**
@@ -87,12 +100,17 @@ public class RestController {
      * @param password (New) Password of PDF file
      * @return New PDF file
      */
-    @PostMapping(value = "/encrypt", produces = MediaType.APPLICATION_PDF_VALUE, consumes = {"multipart/form-data"})
-    public ResponseEntity<Resource> encryptPDF(@RequestParam(name = "pdfFile") MultipartFile pdfFile,
-                                               @RequestParam(name = "password") String password,
-                                               @RequestParam(name = "pdfPassword", required = false) String pdfPassword
+    @PostMapping(value = "/encrypt", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Resource> encryptPDF(
+            @RequestPart(name = "pdfFile") MultipartFile pdfFile, @RequestPart(name = "password") String password,
+            @RequestPart(name = "pdfPassword", required = false) String pdfPassword
 
     ) {
+        // Check the PDF File is not null
+        if (pdfFile == null) {
+            throw new InvalidPDFException("PDF File can not be null.");
+        }
+
         String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
         // Check if password is not empty
         if (isEmpty(password)) {
@@ -112,9 +130,14 @@ public class RestController {
      * @param password Password of PDF file
      * @return New PDF file
      */
-    @PostMapping(value = "/decrypt", produces = MediaType.APPLICATION_PDF_VALUE, consumes = {"multipart/form-data"})
+    @PostMapping(value = "/decrypt", produces = MediaType.APPLICATION_PDF_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Resource> decryptPDF(@RequestParam(name = "pdfFile") MultipartFile pdfFile,
                                                @RequestParam(name = "password") String password) {
+        // Check the PDF File is not null
+        if (pdfFile == null) {
+            throw new InvalidPDFException("PDF File can not be null.");
+        }
+
         String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
         // Check if password is not empty
         if (isEmpty(password)) {
@@ -169,6 +192,10 @@ public class RestController {
     public ResponseEntity<Resource> splitPDF(@RequestParam(name = "pdfFile") MultipartFile pdfFile,
                                              @RequestParam(name = "pageNumbers") String pageNumbers,
                                              @RequestParam(name = "pdfPassword", required = false) String pdfPassword) {
+        // Check the PDF File is not null
+        if (pdfFile == null) {
+            throw new InvalidPDFException("PDF File can not be null.");
+        }
         String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
         // Check if pageNumbers is not empty
         if (fileName == null || fileName.length() == 0) {
@@ -195,6 +222,10 @@ public class RestController {
     public ResponseEntity<Resource> deletePDF(@RequestParam(name = "pdfFile") MultipartFile pdfFile,
                                               @RequestParam(name = "pageNumbers") String pageNumbers,
                                               @RequestParam(name = "pdfPassword", required = false) String pdfPassword) {
+        // Check the PDF File is not null
+        if (pdfFile == null) {
+            throw new InvalidPDFException("PDF File can not be null.");
+        }
         String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
         // Check if pageNumbers is not empty
         if (fileName == null || fileName.length() == 0) {
@@ -214,8 +245,12 @@ public class RestController {
      * @return merged PDF file
      */
     @PostMapping(value = "/merge", produces = MediaType.APPLICATION_PDF_VALUE, consumes = {"multipart/form-data"})
-    public ResponseEntity<Resource> mergePDF(@RequestParam(name = "pdfFiles") MultipartFile[] pdfFiles,
-                                             @RequestParam(name = "pdfPassword", required = false) String pdfPassword) {
+    public ResponseEntity<Resource> mergePDF(@RequestPart(name = "pdfFiles") MultipartFile[] pdfFiles,
+                                             @RequestPart(name = "pdfPassword", required = false) String pdfPassword) {
+        // Check the PDF File is not null
+        if (pdfFiles == null) {
+            throw new InvalidPDFException("PDF File can not be null.");
+        }
         for (MultipartFile pdfFile : pdfFiles) {
             String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
             // Check if pageNumbers is not empty
@@ -228,4 +263,5 @@ public class RestController {
         Path pdfFilePath = pdfService.mergePDF(pdfFiles, pdfPassword);
         return getFileResponse(pdfFilePath, "pdf");
     }
+
 }

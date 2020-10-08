@@ -17,7 +17,8 @@ class HeaderComponent extends Component {
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="main-nav"/>
                         <Navbar.Collapse id="main-nav">
-                            <Nav className={"mr-auto"}>
+                            <Nav className={"mr-auto"} onSelect={this.handleChange()}>
+                                <div id="marker"></div>
                                 <Nav.Link href="/">Home</Nav.Link>
                                 <Nav.Link href={getPDFActionURL("MERGE")}>Merge</Nav.Link>
                                 <Nav.Link href={getPDFActionURL("SPLIT")}>Split</Nav.Link>
@@ -27,46 +28,27 @@ class HeaderComponent extends Component {
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
-                    {/*<nav className={"navbar navbar-expand-lg navbar-dark bg-dark"}>
-                        <a className={"navbar-brand flex"} href={"/"} title="PrettyPDF">
-                            <img src="assets/images/brand.png"
-                                // className="d-inline-block align-top"
-                                 width={"50"}
-                                 alt={"PrettyPDF"}/>
-                        </a>
-                        <button className={"navbar-toggler collapsed"} type={"button"} data-toggle={"collapse"}
-                                data-target={"#mainNav"} aria-controls={"mainNav"} aria-expanded="false"
-                                aria-label="Toggle">
-                            <span className="toggler-icon"></span>
-                            <span className="toggler-icon"></span>
-                            <span className="toggler-icon"></span>
-                        </button>
-                        <div className={"navbar-collapse sub-menu-bar collapse"} id={"mainNav"}>
-                            <ul className={"navbar-nav mr-auto"}>
-                                <li className={"nav-item active"}>
-                                    <a className={"nav-link"} href={"/"}>Home</a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} href={getPDFActionURL("MERGE")}>Merge</a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} href={getPDFActionURL("SPLIT")}>Split</a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} href={getPDFActionURL("DELETE")}>Delete</a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} href={getPDFActionURL("ENCRYPT")}>Lock</a>
-                                </li>
-                                <li className={"nav-item"}>
-                                    <a className={"nav-link"} href={getPDFActionURL("DECRYPT")}>Unlock</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>*/}
                 </header>
             </div>
         );
+    }
+
+    handleChange() {
+        console.log("handling change")
+        let marker = document.querySelector("#marker");
+        let item = document.querySelectorAll("nav a");
+
+        function indicator(e) {
+            marker.style.left = e.offsetLeft + "px";
+            marker.style.width = e.offsetWidth + "px";
+        }
+
+        item.forEach(link => {
+            console.log(link);
+            link.addEventListener('click', (e) => {
+                indicator(e.target);
+            });
+        });
     }
 }
 

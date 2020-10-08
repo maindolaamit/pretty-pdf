@@ -17,7 +17,7 @@ function MergeComponent() {
 function useMergeForm() {
     let submitBtnText = 'Merge PDFs';
 
-    const {handleChange, handleSubmit, values, errors} = useMyFormHook({
+    const {handleChange, handleSubmit, values, errors, fileNames} = useMyFormHook({
         pdfFile: ''
     }, submit, validateErrors);
 
@@ -42,15 +42,16 @@ function useMergeForm() {
         return errors;
     }
 
-    // Actual Form content
+     // Actual Form content
     return (<form onSubmit={handleSubmit}>
         <div className="form-group custom-file mb-2">
-            <input type="file" id="pdfFile" name={"pdfFile"}
+            <input id="pdfFile" type="file" multiple accept="application/pdf" name={"pdfFile"}
                    className={`form-control-file custom-file-input ${errors.pdfFile && "is-invalid"}`}
-                   value={values.pdfFile} onChange={handleChange}/>
-            <label className="custom-file-label" htmlFor="pdfFile">Choose file</label>
+                   value={values.pdfFile} onChange={handleChange}></input>
+            <label className="custom-file-label" htmlFor="pdfFile">Choose files</label>
             <div className={"invalid-feedback"}>{errors.pdfFile}</div>
         </div>
+        {fileNames}
         <button type={"submit"} className={"btn btn-info rounded-pill btn-lg waves-effect action-btn"}>{submitBtnText}
         </button>
     </form>);
